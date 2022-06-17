@@ -20,7 +20,7 @@ public class HotspotClient {
         HotspotClient.wifiManager = wifiManager;
     }
 
-    public static boolean connect(Context context, int port, Handler handler) {
+    public static boolean connect(int port, Handler handler) {
         if (wifiManager == null)
             return false;
         new Thread(() -> {
