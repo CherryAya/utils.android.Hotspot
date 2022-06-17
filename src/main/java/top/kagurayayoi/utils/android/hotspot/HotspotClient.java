@@ -1,6 +1,5 @@
 package top.kagurayayoi.utils.android.hotspot;
 
-import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.text.format.Formatter;
@@ -15,6 +14,7 @@ public class HotspotClient {
     private static WifiManager wifiManager;
     private static ConnectThread connector;
     private static ListenerThread listener;
+    private static Socket socket;
 
     public static void initWifiManager(WifiManager wifiManager) {
         HotspotClient.wifiManager = wifiManager;
@@ -25,7 +25,7 @@ public class HotspotClient {
             return false;
         new Thread(() -> {
             try {
-                Socket socket = new Socket(getWifiRouteIpAddress(), port);
+                socket = new Socket(getWifiRouteIpAddress(), port);
                 connector = new ConnectThread(socket, handler);
                 connector.start();
             } catch (Exception ex) {
@@ -35,6 +35,10 @@ public class HotspotClient {
         listener = new ListenerThread(port, handler);
         listener.start();
         return true;
+    }
+
+    public static ListenerThread getListener() {
+        return listener;
     }
 
     public static void sendMessage(String message) {
